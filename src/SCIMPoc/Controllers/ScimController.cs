@@ -36,7 +36,7 @@ namespace SCIMPoc.Controllers
                 {
                     new
                     {
-                        Name = "userName",
+                        Name = "username",
                         Type = "string",
                         Description = "Username",
                         Required = true,
@@ -44,73 +44,6 @@ namespace SCIMPoc.Controllers
                         Mutability = "readWrite",
                         Returned = "default",
                         Uniqueness = "server"
-                    },
-                    new
-                    {
-                        Name = "name",
-                        Type = "complex",
-                        Description = "User's name",
-                        Required = true,
-                        MultiValued = false,
-                        SubAttributes = new object[]
-                        {
-                            new
-                            {
-                                Name = "givenName",
-                                Type = "string",
-                                Description = "Given name or first name",
-                                Required = false,
-                                Mutability = "readWrite",
-                                Returned = "default",
-                            },
-                            new
-                            {
-                                Name = "familyName",
-                                Type = "string",
-                                Description = "Family name or last name",
-                                Required = false,
-                                Mutability = "readWrite",
-                                Returned = "default",
-                            }
-                        }
-                    },
-                    new
-                    {
-                        Name = "emails",
-                        Type = "complex",
-                        MultiValued = true,
-                        Description = "Email addresses for the user",
-                        Required = false,
-                        SubAttributes = new object[]
-                        {
-                            new
-                            {
-                                Name = "value",
-                                Type = "string",
-                                Description = "Email address",
-                                Required = true,
-                                Mutability = "readWrite",
-                                Returned = "default",
-                            },
-                            new
-                            {
-                                Name = "type",
-                                Type = "string",
-                                Description = "Email type",
-                                Required = false,
-                                Mutability = "readWrite",
-                                Returned = "default",
-                            },
-                            new
-                            {
-                                Name = "primary",
-                                Type = "boolean",
-                                Description = "Primary email indicator",
-                                Required = false,
-                                Mutability = "readWrite",
-                                Returned = "default",
-                            }
-                        }
                     },
                     new
                     {
@@ -133,7 +66,6 @@ namespace SCIMPoc.Controllers
         [Route("Users")]
         public ActionResult GetUsers([FromQuery] int page = 1, [FromQuery] int perPage = 10, [FromQuery] string filter = "")
         {
-            //var x = DynamicExpressionParser.ParseLambda<ScimUser, bool>(new(), false, filter);
             var startIndex = StartIndex(page, perPage);
             var results = new List<object>();
             for (int i = Math.Min(users.Count, startIndex); i < Math.Min(users.Count, startIndex + perPage); i += 1)
