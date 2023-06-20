@@ -12,8 +12,8 @@ namespace SCIMPoc.Controllers
     public class ScimController : ControllerBase
     {
         private readonly ILogger<ScimController> logger;
-        private static readonly List<ScimUser> users = new();
-        private static readonly Dictionary<string, ScimUser> usersMap = new();
+        private static readonly List<ScimUser> _users = new();
+        private static readonly Dictionary<string, ScimUser> _usersMap = new();
 
         public ScimController(ILogger<ScimController> logger)
         {
@@ -68,9 +68,9 @@ namespace SCIMPoc.Controllers
         {
             var startIndex = StartIndex(page, perPage);
             var results = new List<object>();
-            for (int i = Math.Min(users.Count, startIndex); i < Math.Min(users.Count, startIndex + perPage); i += 1)
+            for (int i = Math.Min(_users.Count, startIndex); i < Math.Min(_users.Count, startIndex + perPage); i += 1)
             {
-                results.Add(users[i]);
+                results.Add(_users[i]);
             }
 
             return Ok(new ScimListResponse(results.Count, perPage, startIndex, results));
@@ -80,7 +80,7 @@ namespace SCIMPoc.Controllers
         [Route("Users/{user}")]
         public ActionResult GetUsers(string user)
         {
-            if (usersMap.TryGetValue(user, out var value))
+            if (_usersMap.TryGetValue(user, out var value))
             {
                 return Ok(value);
             }
@@ -92,13 +92,13 @@ namespace SCIMPoc.Controllers
         [Route("Users")]
         public ActionResult CreateUser([FromBody] ScimUser user)
         {
-            if (usersMap.TryGetValue(user.Username, out var value))
+            if (_usersMap.TryGetValue(user.Username, out var value))
             {
                 return new ObjectResult(new ScimError(409, $"user exists with username {user.Username}", "user exists", ""));
             }
 
-            users.Add(user);
-            usersMap[user.Username] = user;
+            _users.Add(user);
+            _usersMap[user.Username] = user;
             return Ok(user);
         }
 
